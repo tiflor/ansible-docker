@@ -1,2 +1,39 @@
 ---
 # tasks file for ansible-docker
+
+- name: check dependencies
+  package:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    state: present
+  become: yes
+
+- name: Add an Apt signing key for docker
+  apt_key:
+    id: "{{ docker_apt_key_id}}"
+    url: "{{ docker_apt_key_url }}"
+    state: present
+  become: yes
+
+- name: Add Docker ppa
+  apt_repository:
+    repo: "{{ docker_apt_ppa }}"
+    state: present
+    update_cache: true  
+  become: yes
+
+# Install step
+
+- name: install docker
+  package:
+    name:
+      - docker-ce
+    state: present
+  become: yes
+  notify: 
+
+# install docker compose
+
+- include_tasks: docker_compose.yml

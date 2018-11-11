@@ -1,5 +1,7 @@
 Vagrant.configure("2") do |config|
+
   config.vm.box = "ubuntu/xenial64"
+  config.vm.synced_folder "../", "/etc/ansible/roles/test_role"
 
   config.vm.provision "shell", inline: <<-SHELL
      apt-add-repository ppa:ansible/ansible
@@ -8,4 +10,9 @@ Vagrant.configure("2") do |config|
      apt-get -y dist-upgrade
   SHELL
 
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+  ansible-playbook /vagrant/test.yml -i /vagrant/inventory 
+  SHELL
+  
 end
+ 

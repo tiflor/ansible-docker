@@ -1,1 +1,4 @@
+#Vagrant related files
 .vagrant
+*cloudimg-console.log
+tests/test.retry
